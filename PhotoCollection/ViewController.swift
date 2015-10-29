@@ -11,21 +11,17 @@ import AlamofireImage
 
 class ViewController: UIViewController, UICollectionViewDataSource {
     
-    let balls = ["Baseball", "Basketball", "Football"]
+    @IBOutlet weak var collectionView: UICollectionView!
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return balls.count
+        return NetworkManager.sharedManager.images.count
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCellWithReuseIdentifier("PHOTO_CELL", forIndexPath: indexPath) as! PhotoCell
-        let url = NSURL(string: "https://raw.githubusercontent.com/wannabewize/TAcademy_iOS_Samples/master/Book1/10_ListScene/TableCatalog/TableCatalog/product_images/\(balls[indexPath.row]).png")
+        let url = NSURL(string: NetworkManager.sharedManager.images[indexPath.row])
 //        let data = NSData(contentsOfURL: url!)
 //        cell.imageView.image = UIImage(data: data!)
-//        
-//        let imageView = UIImageView(frame: frame)
-//        let URL = NSURL(string: "https://httpbin.org/image/png")!
         let placeholderImage = UIImage(named: "default-placeholder")!
-        
         cell.imageView.af_setImageWithURL(url!, placeholderImage: placeholderImage)
         return cell
     }
@@ -33,6 +29,20 @@ class ViewController: UIViewController, UICollectionViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: "tapped:")
+        tapRecognizer.allowedPressTypes = [NSNumber(integer: UIPressType.PlayPause.rawValue)];
+        self.view.addGestureRecognizer(tapRecognizer)
+        NetworkManager.sharedManager.fetchImages()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "handleUpdate", name: ImageUpatedNotification, object: nil)
+    }
+    
+    func handleUpdate() {
+        collectionView.reloadData()
+    }
+    
+    func tapped(tap: UITapGestureRecognizer) {
+        print(tap)
+        NetworkManager.sharedManager.fetchImages()
     }
 
     override func didReceiveMemoryWarning() {
