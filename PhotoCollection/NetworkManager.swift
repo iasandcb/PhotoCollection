@@ -19,8 +19,8 @@ class NetworkManager {
     
     init() {
         var defaultHeaders = Manager.sharedInstance.session.configuration.HTTPAdditionalHeaders ?? [:]
-        defaultHeaders["X-Parse-REST-API-Key"] = "d0zRCiGFS2Becr3fVDlV9UDwnnCjLofWlIyPBbEq"
-        defaultHeaders["X-Parse-Application-Id"] = "Jrfrtb7blTPVKEPKS2OC0QgE0RTKqQzZHNxKrfoR"
+        defaultHeaders["X-Parse-REST-API-Key"] = ""
+        defaultHeaders["X-Parse-Application-Id"] = ""
         
         let configuration = NSURLSessionConfiguration.defaultSessionConfiguration()
         configuration.HTTPAdditionalHeaders = defaultHeaders
